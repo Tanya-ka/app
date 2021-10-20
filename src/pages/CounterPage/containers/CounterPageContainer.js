@@ -1,49 +1,48 @@
-import React, {Component} from 'react';
-import Counter from '../components/Counter';
-
-
+import React, { Component } from "react";
+import Counter from "../components/Counter";
 
 class CounterPageContainer extends Component {
-    state = {
-        countValue: 0,
-        parityType: 'Введено чётное число',
-    };
+  state = {
+    countValue: 0,
+    parityType: "Введено чётное число",
+  };
 
-    handleIncrement =() => {
-        const newValue = this.state.countValue + 1;
-            if (newValue % 2 === 0){
-                this.setState({countValue: newValue, parityType: 'Введено чётное число'});
-                       } else {
-                        this.setState({countValue: newValue, parityType: 'Введено нечётное число'});
-                     }       
-    };
+  handleIncrement = () => {
+    this.setState({ ...this.state, countValue: this.state.countValue + 1 });
+  };
 
-    handleDecrement =() => {
-        const newValue = this.state.countValue - 1;
-            if (newValue % 2 === 0){
-                this.setState({countValue: newValue, parityType: 'Введено чётное число'});
-                       } else {
-                        this.setState({countValue: newValue, parityType: 'Введено нечётное число'});
-                     }
-                     if (newValue < 0){
-                        this.setState({...this.state, countValue: 0});
-                               } 
-    };
+  handleDecrement = () => {
+    this.setState({ ...this.state, countValue: this.state.countValue - 1 });
+    this.state.countValue - 1 < 0 &&
+      this.setState({ ...this.state, countValue: 0 });
+  };
 
-    handleReset =() => {
-        this.setState({countValue: 0, parityType: 'Введено чётное число'});
-    };
-    
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.countValue !== this.state.countValue) {
+      this.state.countValue % 2 === 0
+        ? this.setState({ ...this.state, parityType: "Введено чётное число" })
+        : this.setState({
+            ...this.state,
+            parityType: "Введено нечётное число",
+          });
+    }
+  }
 
-    render() {
-        return <Counter 
-        countValue={this.state.countValue} 
-        handleIncrement={this.handleIncrement} 
-        handleDecrement={this.handleDecrement} 
-        handleReset={this.handleReset}  
+  handleReset = () => {
+    this.setState({ countValue: 0, parityType: "Введено чётное число" });
+  };
+
+  render() {
+    return (
+      <Counter
+        countValue={this.state.countValue}
+        handleIncrement={this.handleIncrement}
+        handleDecrement={this.handleDecrement}
+        handleReset={this.handleReset}
         parityType={this.state.parityType}
-        />
-     } 
+      />
+    );
+  }
 }
 
 export default CounterPageContainer;
